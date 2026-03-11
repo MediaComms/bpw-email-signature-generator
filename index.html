@@ -42,8 +42,8 @@
         <h2>2. Preview & Actions</h2>
         <div class="preview-box" id="signature-preview"></div>
         <button class="btn btn-copy" id="btn-copy" onclick="copySig()" disabled>Copy Signature for Gmail</button>
-        <button class="btn btn-html" id="btn-html" onclick="downloadHTML()" disabled>Download HTML File</button>
-        <p id="status">✓ Done! Ready for next input.</p>
+        <button class="btn btn-html" id="btn-html" onclick="downloadHTML()" disabled>Download .signature File</button>
+        <p id="status">✓ Done! Fields cleared.</p>
     </div>
 </div>
 
@@ -54,8 +54,8 @@
     const bHtml = document.getElementById('btn-html');
     const statusMsg = document.getElementById('status');
 
-    // The Logo is encoded here. It will ALWAYS show.
-    const logoData = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAABi97L0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wMS8xMy0xMjowODozMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXBNTS8xLjAvIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKGRhd24pIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjI0QTM0QUZCQzI5RTExRTc4N0VDRkM5RTAyNDNBNTQ2IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjI0QTM0QUZDQzI5RTExRTc4N0VDRkM5RTAyNDNBNTQ2Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjRBMzRBRjkKzI5RTExRTc4N0VDRkM5RTAyNDNBNTQ2IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjI0QTM0QUZBQzI5RTExRTc4N0VDRkM5RTAyNDNBNTQ2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+0mZ9pAAAAMBQTFRF////u7u77u7ucXFxiIiIcXFxb29v7u7u7u7u7u7ucXFxu7u7cXFxb29vu7u77u7ucXFxb29vcXFxb29vu7u7cXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29vcXFxb29v////917yXQAAAEh0Uk5UAAAgMFBgcICAgIDAcICQkJCAgICAoJCQoKCgoMDAoLCwsLDAsKCwsMDA0MDA4ICAwNDAwMCwsLCwwMDAwMDAwNDA0NDQwMDQ0DQ0XqXU6UAAAF/SURBVFjD7ZjZcqMwEEXpAtkiG9vYmC0SICEh9v//LSeS7vTMVFV5mD7M86ByS6W60p0uof9yXFv/L4O6096vUbe0N68j1CHt86+C6pT297v/Oqn98+6fS+p83v13dS7vOvnkvqfe/+S6pD38S0sh++ZfPAtLofvTD/4Zp9G69NofRqtT6P1abQ+jdanc9+N08R60u9R576f3G33e9K9P9f9Xnbv93S/B937fW29p3pP9n5PW+/h3u8pX+/vUfWefE/2nuxV78nevSffk70ne0/27j35nuw92Xuy92Svevfm9z75vU9+75Pf++T3Pvm9T37vU7nfh/70Q7p8P8hPz6fL8/506fnX46/nX8+/nn89/3r+9fzr+dfzr+dfz7+efz3/ev71/Ov51/Ov51/Pv55/Pf96/vX86/nX86/nX8+/nn89/3r+9fzr+dfzr+dfz7+efz3/ev71/Ov51/PvXz0fPv/n8uHzXy4fPv/p8uHzny4fPn8+/vP5X6f/AwYAjyA97DqF2QkAAAAASUVORK5CYII=";
+    // Using a high-availability direct image link to ensure visibility in all browsers/clients
+    const logoUrl = "https://i.ibb.co/XRsM66N/bpw-logo.jpg";
 
     function update() {
         const name = document.getElementById('f-name').value.trim();
@@ -70,8 +70,8 @@
         preview.innerHTML = `
 <table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; line-height: 1.2; color: #333333; width: 480px; background-color: #ffffff;">
     <tr>
-        <td style="width: 85px; vertical-align: middle; padding-right: 15px; border-right: 2px solid #704EA0;">
-            <img src="${logoData}" alt="BPW" width="80" style="display: block; width: 80px; border: 0;">
+        <td style="width: 90px; vertical-align: middle; padding-right: 15px; border-right: 2px solid #704EA0;">
+            <img src="${logoUrl}" alt="BPW" width="80" style="display: block; width: 80px; border: 0;">
         </td>
         <td style="padding-left: 15px; vertical-align: middle;">
             <div style="font-size: 16px; font-weight: bold; color: #704EA0; margin: 0;">${name || 'Full Name'}</div>
@@ -103,12 +103,16 @@
         window.getSelection().addRange(range);
         document.execCommand('copy');
         window.getSelection().removeAllRanges();
-        showStatus("✓ Copied to clipboard!");
+        showStatus("✓ Copied! Ready to paste into Gmail.");
     }
 
     function downloadHTML() {
         const nameVal = document.getElementById('f-name').value;
-        const filename = nameVal.replace(/\s+/g, '_') + "_Signature.html";
+        const emailVal = document.getElementById('f-email').value;
+        
+        // Custom File Name Format: FullName_email.signature
+        const filename = nameVal.replace(/\s+/g, '') + "_" + emailVal + ".signature";
+        
         const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="padding:20px;">${preview.innerHTML}</body></html>`;
         
         const blob = new Blob([htmlContent], {type: 'text/html'});
@@ -117,10 +121,10 @@
         link.download = filename;
         link.click();
         
-        // Resetting fields ONLY after download
+        // Resetting fields AFTER download trigger
         inputs.forEach(i => i.value = "");
         update();
-        showStatus("✓ Downloaded and cleared!");
+        showStatus("✓ File saved. Fields cleared.");
     }
 
     function showStatus(text) {
@@ -130,8 +134,7 @@
     }
 
     inputs.forEach(i => i.addEventListener('input', update));
-    // Initial blank state shows logo immediately
-    update();
+    update(); // Run once to show initial template with logo
 </script>
 </body>
 </html>
