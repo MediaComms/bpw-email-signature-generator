@@ -6,7 +6,7 @@
     <title>BPW PNG Signature Generator</title>
     <style>
         :root { --brand: #704EA0; --bg: #f4f4f9; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
         header { background: var(--brand); color: white; width: 100%; padding: 15px 0; text-align: center; margin-bottom: 20px; }
         .container { display: flex; flex-wrap: wrap; max-width: 900px; width: 95%; gap: 20px; justify-content: center; }
         .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); flex: 1; min-width: 320px; }
@@ -15,11 +15,9 @@
         label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 3px; color: #555; }
         input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .preview-box { border: 1px dashed #ccc; padding: 10px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 100px; align-items: center; }
-        .btn { border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; color: white; margin-bottom: 10px; transition: 0.2s; display: block; text-align: center; text-decoration: none; }
+        .btn { border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; color: white; margin-bottom: 10px; transition: 0.2s; display: block; text-align: center; }
         .btn-copy { background: var(--brand); }
-        .btn-copy:hover { background: #5a3d82; }
-        .btn-html { background: #444; }
-        .btn-html:hover { background: #333; }
+        .btn-html { background: #444; border: none; text-decoration: none; color: white; }
         #status { color: #28a745; font-size: 13px; text-align: center; font-weight: bold; margin-top: 5px; display: none; }
         .placeholder-text { color: #aaa; font-style: italic; font-size: 13px; }
     </style>
@@ -30,27 +28,46 @@
 
 <div class="container">
     <div class="box">
-        <h2>1. Enter Details</h2>
-        <div class="form-group"><label>Full Name</label><input type="text" id="f-name" placeholder="e.g. Stephen Taera Junior"></div>
-        <div class="form-group"><label>Job Title</label><input type="text" id="f-title" placeholder="e.g. IT Officer"></div>
-        <div class="form-group"><label>Phone Number</label><input type="text" id="f-phone" placeholder="e.g. +675 7000 0000"></div>
-        <div class="form-group"><label>Email Address</label><input type="email" id="f-email" placeholder="e.g. name@bpw.org.pg"></div>
+        <h2>1. Personnel Details</h2>
+        <div class="form-group"><label>Full Name</label><input type="text" id="f-name" placeholder="Enter Name"></div>
+        <div class="form-group"><label>Job Title</label><input type="text" id="f-title" placeholder="Enter Title"></div>
+        <div class="form-group"><label>Phone Number</label><input type="text" id="f-phone" placeholder="+675..."></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="f-email" placeholder="email@bpw.org.pg"></div>
     </div>
 
     <div class="box">
         <h2>2. Preview & Actions</h2>
         <div class="preview-box" id="signature-preview">
-            <span class="placeholder-text">Type details on the left to generate preview...</span>
+            <span class="placeholder-text">Waiting for details...</span>
         </div>
         <button class="btn btn-copy" onclick="copySig()">Copy Signature for Gmail</button>
         <button class="btn btn-html" onclick="downloadHTML()">Download HTML File</button>
-        <p id="status">✓ Action Successful!</p>
+        <p id="status">✓ Done! Ready to paste in Gmail.</p>
     </div>
 </div>
 
 <script>
     const inputs = document.querySelectorAll('input');
     const preview = document.getElementById('signature-preview');
+    let logoBase64 = "";
+
+    // IMPORTANT: This converts your local logo.jpg into a data string so it stays permanent
+    const img = new Image();
+    img.src = 'logo.jpg';
+    img.crossOrigin = "anonymous";
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        try {
+            logoBase64 = canvas.toDataURL('image/jpeg');
+            update();
+        } catch (e) {
+            console.log("Local file security blocked conversion. Using relative path.");
+        }
+    };
 
     function update() {
         const name = document.getElementById('f-name').value;
@@ -58,19 +75,18 @@
         const phone = document.getElementById('f-phone').value;
         const email = document.getElementById('f-email').value;
         
-        // Only show the signature if at least the name is entered
         if (!name && !title && !phone && !email) {
-            preview.innerHTML = '<span class="placeholder-text">Type details on the left to generate preview...</span>';
+            preview.innerHTML = '<span class="placeholder-text">Waiting for details...</span>';
             return;
         }
 
-        const logoUrl = window.location.href.split('index.html')[0].split('#')[0] + "logo.jpg";
+        const logoSrc = logoBase64 || 'logo.jpg';
 
         preview.innerHTML = `
 <table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; line-height: 1.2; color: #333333; width: 460px; background-color: #ffffff;">
     <tr>
-        <td style="width: 75px; vertical-align: middle; padding-right: 12px; border-right: 2px solid #704EA0;">
-            <img src="${logoUrl}" alt="BPW" width="70" style="display: block; width: 70px; border: 0;">
+        <td style="width: 85px; vertical-align: middle; padding-right: 12px; border-right: 2px solid #704EA0;">
+            <img src="${logoSrc}" alt="BPW" width="80" style="display: block; width: 80px; border: 0;">
         </td>
         <td style="padding-left: 12px; vertical-align: middle;">
             <div style="font-size: 15px; font-weight: bold; color: #704EA0; margin: 0;">${name || 'Full Name'}</div>
@@ -96,34 +112,23 @@
     }
 
     function copySig() {
-        if (document.querySelector('.placeholder-text')) return;
         const range = document.createRange();
         range.selectNode(preview);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand('copy');
-        window.getSelection().removeAllRanges();
-        showStatus();
+        document.getElementById('status').style.display = 'block';
+        setTimeout(() => document.getElementById('status').style.display = 'none', 3000);
     }
 
     function downloadHTML() {
-        if (document.querySelector('.placeholder-text')) return;
         const name = document.getElementById('f-name').value || "Signature";
-        const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${preview.innerHTML}</body></html>`;
-        const blob = new Blob([htmlContent], {type: 'text/html'});
-        const elem = window.document.createElement('a');
-        elem.href = window.URL.createObjectURL(blob);
-        elem.download = name.replace(/\s+/g, '_') + "_Signature.html";
-        document.body.appendChild(elem);
-        elem.click();
-        document.body.removeChild(elem);
-        showStatus();
-    }
-
-    function showStatus() {
-        const s = document.getElementById('status');
-        s.style.display = 'block';
-        setTimeout(() => s.style.display = 'none', 3000);
+        const html = \`<!DOCTYPE html><html><body>\${preview.innerHTML}</body></html>\`;
+        const blob = new Blob([html], {type: 'text/html'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name.replace(/ /g, "_") + ".html";
+        a.click();
     }
 
     inputs.forEach(i => i.addEventListener('input', update));
