@@ -15,9 +15,15 @@
         label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 3px; color: #555; }
         input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .preview-box { border: 1px dashed #ccc; padding: 10px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 100px; align-items: center; }
-        .btn { border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; color: white; margin-bottom: 10px; transition: 0.2s; display: block; text-align: center; }
+        
+        /* Button Styles */
+        .btn { border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; color: white; margin-bottom: 10px; transition: 0.3s; display: block; text-align: center; }
         .btn-copy { background: var(--brand); }
-        .btn-html { background: #444; border: none; text-decoration: none; color: white; }
+        .btn-html { background: #444; text-decoration: none; }
+        
+        /* Inactive State */
+        .btn:disabled { background: #ccc !important; cursor: not-allowed; opacity: 0.6; }
+        
         #status { color: #28a745; font-size: 13px; text-align: center; font-weight: bold; margin-top: 5px; display: none; }
         .placeholder-text { color: #aaa; font-style: italic; font-size: 13px; }
     </style>
@@ -38,59 +44,49 @@
     <div class="box">
         <h2>2. Preview & Actions</h2>
         <div class="preview-box" id="signature-preview">
-            <span class="placeholder-text">Waiting for details...</span>
+            <span class="placeholder-text">Please fill all fields to enable buttons...</span>
         </div>
-        <button class="btn btn-copy" onclick="copySig()">Copy Signature for Gmail</button>
-        <button class="btn btn-html" onclick="downloadHTML()">Download HTML File</button>
-        <p id="status">✓ Done! Ready to paste in Gmail.</p>
+        <button class="btn btn-copy" id="btn-copy" onclick="copySig()" disabled>Copy Signature for Gmail</button>
+        <button class="btn btn-html" id="btn-html" onclick="downloadHTML()" disabled>Download HTML File</button>
+        <p id="status">✓ Action Successful!</p>
     </div>
 </div>
 
 <script>
     const inputs = document.querySelectorAll('input');
     const preview = document.getElementById('signature-preview');
-    let logoBase64 = "";
+    const btnCopy = document.getElementById('btn-copy');
+    const btnHtml = document.getElementById('btn-html');
 
-    // IMPORTANT: This converts your local logo.jpg into a data string so it stays permanent
-    const img = new Image();
-    img.src = 'logo.jpg';
-    img.crossOrigin = "anonymous";
-    img.onload = function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        try {
-            logoBase64 = canvas.toDataURL('image/jpeg');
-            update();
-        } catch (e) {
-            console.log("Local file security blocked conversion. Using relative path.");
-        }
-    };
+    const logoUrl = "https://i.ibb.co/XRsM66N/bpw-logo.jpg";
 
     function update() {
-        const name = document.getElementById('f-name').value;
-        const title = document.getElementById('f-title').value;
-        const phone = document.getElementById('f-phone').value;
-        const email = document.getElementById('f-email').value;
+        const name = document.getElementById('f-name').value.trim();
+        const title = document.getElementById('f-title').value.trim();
+        const phone = document.getElementById('f-phone').value.trim();
+        const email = document.getElementById('f-email').value.trim();
         
-        if (!name && !title && !phone && !email) {
-            preview.innerHTML = '<span class="placeholder-text">Waiting for details...</span>';
+        // Check if all fields are filled
+        const allFilled = name && title && phone && email;
+        
+        // Enable or Disable buttons
+        btnCopy.disabled = !allFilled;
+        btnHtml.disabled = !allFilled;
+
+        if (!allFilled) {
+            preview.innerHTML = '<span class="placeholder-text">Please fill all fields to enable buttons...</span>';
             return;
         }
-
-        const logoSrc = logoBase64 || 'logo.jpg';
 
         preview.innerHTML = `
 <table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; line-height: 1.2; color: #333333; width: 460px; background-color: #ffffff;">
     <tr>
         <td style="width: 85px; vertical-align: middle; padding-right: 12px; border-right: 2px solid #704EA0;">
-            <img src="${logoSrc}" alt="BPW" width="80" style="display: block; width: 80px; border: 0;">
+            <img src="${logoUrl}" alt="BPW" width="80" style="display: block; width: 80px; border: 0;">
         </td>
         <td style="padding-left: 12px; vertical-align: middle;">
-            <div style="font-size: 15px; font-weight: bold; color: #704EA0; margin: 0;">${name || 'Full Name'}</div>
-            <div style="font-size: 12px; color: #666666; margin-bottom: 2px;"><strong>${title || 'Job Title'}</strong></div>
+            <div style="font-size: 15px; font-weight: bold; color: #704EA0; margin: 0;">${name}</div>
+            <div style="font-size: 12px; color: #666666; margin-bottom: 2px;"><strong>${title}</strong></div>
             <div style="font-size: 12px; color: #000000; font-weight: bold;">Business and Professional Women’s Club of Port Moresby</div>
             
             <div style="font-size: 11px; color: #444; border-top: 1px solid #eee; padding-top: 4px; margin-top: 4px;">
@@ -98,7 +94,7 @@
             </div>
 
             <div style="font-size: 11px; margin-top: 2px;">
-                <strong style="color: #704EA0;">P:</strong> ${phone || '---'} &nbsp;|&nbsp; <strong style="color: #704EA0;">E:</strong> <a href="mailto:${email}" style="color: #0000EE; text-decoration: none;">${email || '---'}</a>
+                <strong style="color: #704EA0;">P:</strong> ${phone} &nbsp;|&nbsp; <strong style="color: #704EA0;">E:</strong> <a href="mailto:${email}" style="color: #0000EE; text-decoration: none;">${email}</a>
             </div>
 
             <div style="margin-top: 5px;">
@@ -117,18 +113,25 @@
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand('copy');
-        document.getElementById('status').style.display = 'block';
-        setTimeout(() => document.getElementById('status').style.display = 'none', 3000);
+        window.getSelection().removeAllRanges();
+        showStatus();
     }
 
     function downloadHTML() {
         const name = document.getElementById('f-name').value || "Signature";
-        const html = \`<!DOCTYPE html><html><body>\${preview.innerHTML}</body></html>\`;
-        const blob = new Blob([html], {type: 'text/html'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = name.replace(/ /g, "_") + ".html";
-        a.click();
+        const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${preview.innerHTML}</body></html>`;
+        const blob = new Blob([htmlContent], {type: 'text/html'});
+        const elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = name.replace(/\s+/g, '_') + "_Signature.html";
+        elem.click();
+        showStatus();
+    }
+
+    function showStatus() {
+        const s = document.getElementById('status');
+        s.style.display = 'block';
+        setTimeout(() => s.style.display = 'none', 3000);
     }
 
     inputs.forEach(i => i.addEventListener('input', update));
