@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPW PNG - Email Signature Generator</title>
+    <style>
+        :root {
+            --brand-color: #704EA0;
+            --brand-hover: #5a3e82;
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Aptos', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: var(--brand-color);
+            color: white;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            width: 90%;
+            margin: 40px auto;
+            gap: 30px;
+        }
+
+        .form-section, .preview-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 300px;
+        }
+
+        h2 { margin-top: 0; color: var(--brand-color); font-size: 20px; border-bottom: 2px solid var(--bg-color); padding-bottom: 10px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+
+        .preview-box { border: 1px dashed #ccc; padding: 20px; border-radius: 4px; background: #fff; margin-bottom: 20px; }
+
+        button.copy-btn {
+            background-color: var(--brand-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .success-msg { display: none; color: green; text-align: center; margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>BPW PNG Email Signature Generator</h1>
+    </header>
+
+    <div class="container">
+        <div class="form-section">
+            <h2>1. Enter Your Information</h2>
+            <form id="sig-form">
+                <div class="form-group"><label>Full Name</label><input type="text" id="f-name" value="Jane Doe"></div>
+                <div class="form-group"><label>Job Title</label><input type="text" id="f-title" value="President"></div>
+                <div class="form-group"><label>Phone Number</label><input type="text" id="f-phone" value="+675 1234 5678"></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="f-email" value="jane.doe@bpwpng.org"></div>
+                <div class="form-group"><label>Website</label><input type="text" id="f-website" value="www.bpwpng.org"></div>
+            </form>
+        </div>
+
+        <div class="preview-section">
+            <h2>2. Preview & Copy</h2>
+            <div class="preview-box" id="signature-preview"></div>
+            <button class="copy-btn" onclick="copySignature()">Copy Signature</button>
+            <div class="success-msg" id="success-msg">Copied! Paste it into your email settings.</div>
+        </div>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll('#sig-form input');
+        const previewDiv = document.getElementById('signature-preview');
+        
+        function updateSignature() {
+            const name = document.getElementById('f-name').value;
+            const title = document.getElementById('f-title').value;
+            const phone = document.getElementById('f-phone').value;
+            const email = document.getElementById('f-email').value;
+            const website = document.getElementById('f-website').value;
+
+            // Using the filename of the image you uploaded to GitHub
+            const logoUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1) + "BPW Logo - PNG.jpg";
+
+            const sigHTML = `
+<table cellpadding="0" cellspacing="0" border="0" style="font-family: 'Aptos', Arial, sans-serif; font-size: 14px; color: #333333;">
+    <tr>
+        <td style="padding-right: 20px; border-right: 2px solid #704EA0; vertical-align: middle;">
+            <img src="${logoUrl}" alt="BPW PNG" width="120" style="display: block;">
+        </td>
+        <td style="padding-left: 20px; vertical-align: middle;">
+            <p style="margin: 0; font-size: 18px; font-weight: bold; color: #704EA0;">${name}</p>
+            <p style="margin: 0 0 10px 0; color: #555555;">${title} | <strong>BPW PNG</strong></p>
+            <p style="margin: 0; font-size: 13px;"><strong>P:</strong> ${phone}</p>
+            <p style="margin: 0; font-size: 13px;"><strong>E:</strong> <a href="mailto:${email}" style="color: #333; text-decoration: none;">${email}</a></p>
+            <p style="margin: 0; font-size: 13px;"><strong>W:</strong> <a href="http://${website}" style="color: #333; text-decoration: none;">${website}</a></p>
+        </td>
+    </tr>
+</table>`;
+            previewDiv.innerHTML = sigHTML;
+        }
+
+        inputs.forEach(input => input.addEventListener('input', updateSignature));
+        
+        function copySignature() {
+            const range = document.createRange();
+            range.selectNode(previewDiv);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            document.getElementById('success-msg').style.display = 'block';
+        }
+
+        updateSignature();
+    </script>
+</body>
+</html>
