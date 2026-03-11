@@ -27,7 +27,7 @@
             background-color: var(--brand-color);
             color: white;
             width: 100%;
-            padding: 20px 0;
+            padding: 25px 0;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
@@ -56,21 +56,24 @@
         .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
         .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
 
-        .preview-box { border: 1px dashed #ccc; padding: 20px; border-radius: 4px; background: #fff; margin-bottom: 20px; }
+        .preview-box { border: 1px dashed #ccc; padding: 25px; border-radius: 4px; background: #fff; margin-bottom: 20px; min-height: 150px; }
 
         button.copy-btn {
             background-color: var(--brand-color);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 15px 20px;
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
             font-weight: bold;
+            transition: 0.3s;
         }
 
-        .success-msg { display: none; color: green; text-align: center; margin-top: 10px; font-weight: bold; }
+        button.copy-btn:hover { background-color: var(--brand-hover); }
+
+        .success-msg { display: none; color: #28a745; text-align: center; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -87,7 +90,6 @@
                 <div class="form-group"><label>Job Title</label><input type="text" id="f-title" value="President"></div>
                 <div class="form-group"><label>Phone Number</label><input type="text" id="f-phone" value="+675 1234 5678"></div>
                 <div class="form-group"><label>Email Address</label><input type="email" id="f-email" value="jane.doe@bpwpng.org"></div>
-                <div class="form-group"><label>Website</label><input type="text" id="f-website" value="www.bpwpng.org"></div>
             </form>
         </div>
 
@@ -95,7 +97,7 @@
             <h2>2. Preview & Copy</h2>
             <div class="preview-box" id="signature-preview"></div>
             <button class="copy-btn" onclick="copySignature()">Copy Signature</button>
-            <div class="success-msg" id="success-msg">Copied! Paste it into your email settings.</div>
+            <div class="success-msg" id="success-msg">✓ Signature copied! Paste it into your email settings.</div>
         </div>
     </div>
 
@@ -108,23 +110,38 @@
             const title = document.getElementById('f-title').value;
             const phone = document.getElementById('f-phone').value;
             const email = document.getElementById('f-email').value;
-            const website = document.getElementById('f-website').value;
 
-            // Using the filename of the image you uploaded to GitHub
-            const logoUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1) + "logo.png";
+            // Updated logo name as requested
+            const logoUrl = "logo.png";
+            
+            // Social Media Links
+            const fbUrl = "https://www.facebook.com/profile.php?id=100079394379295";
+            const liUrl = "https://www.linkedin.com/company/99291193/";
 
             const sigHTML = `
 <table cellpadding="0" cellspacing="0" border="0" style="font-family: 'Aptos', Arial, sans-serif; font-size: 14px; color: #333333;">
     <tr>
-        <td style="padding-right: 20px; border-right: 2px solid #704EA0; vertical-align: middle;">
-            <img src="${logoUrl}" alt="BPW PNG" width="120" style="display: block;">
+        <td style="padding-right: 20px; border-right: 2px solid #704EA0; vertical-align: middle; width: 130px;">
+            <img src="${logoUrl}" alt="BPW PNG" width="120" style="display: block; border: 0;">
         </td>
         <td style="padding-left: 20px; vertical-align: middle;">
             <p style="margin: 0; font-size: 18px; font-weight: bold; color: #704EA0;">${name}</p>
-            <p style="margin: 0 0 10px 0; color: #555555;">${title} | <strong>BPW PNG</strong></p>
-            <p style="margin: 0; font-size: 13px;"><strong>P:</strong> ${phone}</p>
-            <p style="margin: 0; font-size: 13px;"><strong>E:</strong> <a href="mailto:${email}" style="color: #333; text-decoration: none;">${email}</a></p>
-            <p style="margin: 0; font-size: 13px;"><strong>W:</strong> <a href="http://${website}" style="color: #333; text-decoration: none;">${website}</a></p>
+            <p style="margin: 2px 0 10px 0; color: #555555; font-size: 14px;">${title} | <strong>BPW PNG</strong></p>
+            
+            <table cellpadding="0" cellspacing="0" border="0" style="font-size: 13px; line-height: 1.5;">
+                <tr><td><strong style="color: #704EA0;">P:</strong></td><td style="padding-left: 8px;">${phone}</td></tr>
+                <tr><td><strong style="color: #704EA0;">E:</strong></td><td style="padding-left: 8px;"><a href="mailto:${email}" style="color: #333; text-decoration: none;">${email}</a></td></tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 8px;">
+                        <a href="${fbUrl}" style="text-decoration: none; display: inline-block; margin-right: 10px;">
+                            <span style="background-color: #704EA0; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">FACEBOOK</span>
+                        </a>
+                        <a href="${liUrl}" style="text-decoration: none; display: inline-block;">
+                            <span style="background-color: #704EA0; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">LINKEDIN</span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>`;
@@ -138,8 +155,15 @@
             range.selectNode(previewDiv);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
-            document.execCommand('copy');
-            document.getElementById('success-msg').style.display = 'block';
+            try {
+                document.execCommand('copy');
+                const msg = document.getElementById('success-msg');
+                msg.style.display = 'block';
+                setTimeout(() => { msg.style.display = 'none'; }, 5000);
+            } catch (err) {
+                alert("Please highlight the signature and copy manually.");
+            }
+            window.getSelection().removeAllRanges();
         }
 
         updateSignature();
