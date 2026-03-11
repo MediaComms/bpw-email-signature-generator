@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BPW PNG Signature Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --brand: #704EA0; --bg: #f4f4f9; }
-        body { font-family: 'Aptos', 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
-        header { background: var(--brand); color: white; width: 100%; padding: 25px 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        body { font-family: 'Aptos', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
+        header { background: var(--brand); color: white; width: 100%; padding: 25px 0; text-align: center; }
         .container { display: flex; flex-wrap: wrap; max-width: 900px; width: 95%; margin: 30px auto; gap: 20px; }
         .box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); flex: 1; min-width: 320px; }
         h2 { color: var(--brand); font-size: 18px; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
@@ -17,7 +18,7 @@
         .preview-box { border: 1px dashed #ccc; padding: 20px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 120px; }
         .btn { background: var(--brand); color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
         .btn-download { background: #444; }
-        .btn:hover { opacity: 0.9; }
+        .btn-jpg { background: #2c3e50; }
         #status { color: #28a745; font-size: 13px; text-align: center; font-weight: bold; display: none; }
     </style>
 </head>
@@ -28,18 +29,19 @@
 <div class="container">
     <div class="box">
         <h2>1. Enter Your Details</h2>
-        <div class="form-group"><label>Full Name</label><input type="text" id="f-name" value="Jane Doe"></div>
-        <div class="form-group"><label>Job Title</label><input type="text" id="f-title" value="President"></div>
-        <div class="form-group"><label>Phone Number</label><input type="text" id="f-phone" value="+675 1234 5678"></div>
-        <div class="form-group"><label>Email Address</label><input type="email" id="f-email" value="jane.doe@bpwpng.org"></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="f-name" value="Nedi Lavett"></div>
+        <div class="form-group"><label>Job Title</label><input type="text" id="f-title" value="BPW Secretary"></div>
+        <div class="form-group"><label>Phone Number</label><input type="text" id="f-phone" value="+675 7856 6199"></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="f-email" value="secretary@bpw.org.pg"></div>
     </div>
 
     <div class="box">
         <h2>2. Preview & Actions</h2>
         <div class="preview-box" id="signature-preview"></div>
         <button class="btn" onclick="copySig()">Copy Signature for Gmail</button>
-        <button class="btn btn-download" onclick="downloadSig()">Download HTML File</button>
-        <p id="status">✓ Copied to clipboard! Go to Gmail and Paste.</p>
+        <button class="btn btn-download" onclick="downloadHTML()">Download HTML Format</button>
+        <button class="btn btn-jpg" onclick="downloadJPG()">Download JPG Format</button>
+        <p id="status">✓ Copied to clipboard!</p>
     </div>
 </div>
 
@@ -53,22 +55,24 @@
         const phone = document.getElementById('f-phone').value;
         const email = document.getElementById('f-email').value;
         
-        // Updated to use logo.jpg
         const logoPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1) + "logo.jpg";
 
         const html = `
-<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, Helvetica, sans-serif; line-height: 1.4; color: #333333; width: 400px; background-color: #ffffff;">
+<table id="final-sig" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; line-height: 1.4; color: #333333; width: 480px; background-color: #ffffff;">
     <tr>
         <td style="width: 85px; vertical-align: middle; padding-right: 15px; border-right: 2px solid #704EA0;">
             <img src="${logoPath}" alt="BPW PNG" width="80" style="display: block; width: 80px; border: 0;">
         </td>
         <td style="padding-left: 15px; vertical-align: middle;">
-            <div style="font-size: 17px; font-weight: bold; color: #704EA0; margin: 0; line-height: 1.2;">${name}</div>
-            <div style="font-size: 13px; color: #666666; margin-bottom: 8px;">${title} | <strong>BPW PNG</strong></div>
+            <div style="font-size: 17px; font-weight: bold; color: #704EA0; margin: 0;">${name}</div>
+            <div style="font-size: 14px; color: #666666; margin-bottom: 4px;"><strong>${title}</strong></div>
+            <div style="font-size: 13px; color: #000000; font-weight: bold;">Business and Professional Women’s Club of Port Moresby</div>
+            <div style="font-size: 11px; text-transform: uppercase; margin-bottom: 8px; color: #444;">PAPUA NEW GUINEA</div>
             
-            <table cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #444444;">
+            <table cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #444444; border-top: 1px solid #eee; padding-top: 5px;">
+                <tr><td colspan="2" style="padding-bottom: 3px;">PO Box 1395, Port Moresby, National Capital District</td></tr>
                 <tr><td><strong style="color: #704EA0;">P:</strong></td><td style="padding-left: 5px;">${phone}</td></tr>
-                <tr><td><strong style="color: #704EA0;">E:</strong></td><td style="padding-left: 5px;"><a href="mailto:${email}" style="color: #444444; text-decoration: none;">${email}</a></td></tr>
+                <tr><td><strong style="color: #704EA0;">E:</strong></td><td style="padding-left: 5px;"><a href="mailto:${email}" style="color: #0000EE; text-decoration: underline;">${email}</a></td></tr>
             </table>
 
             <div style="margin-top: 10px;">
@@ -92,20 +96,27 @@
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand('copy');
-        const s = document.getElementById('status');
-        s.style.display = 'block';
-        setTimeout(() => s.style.display = 'none', 4000);
-        window.getSelection().removeAllRanges();
+        document.getElementById('status').style.display = 'block';
+        setTimeout(() => document.getElementById('status').style.display = 'none', 4000);
     }
 
-    function downloadSig() {
-        const element = document.createElement('a');
-        const file = new Blob([preview.innerHTML], {type: 'text/html'});
-        element.href = URL.createObjectURL(file);
-        element.download = "BPW-PNG-Signature.html";
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
+    function downloadHTML() {
+        const blob = new Blob([preview.innerHTML], {type: 'text/html'});
+        const elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = "BPW-Signature.html";
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+    }
+
+    function downloadJPG() {
+        html2canvas(document.querySelector("#final-sig"), { useCORS: true, scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'BPW-Signature.jpg';
+            link.href = canvas.toDataURL('image/jpeg', 0.9);
+            link.click();
+        });
     }
 
     inputs.forEach(i => i.addEventListener('input', update));
