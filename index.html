@@ -17,7 +17,6 @@
         .static-text { color: #888; font-size: 14px; padding: 0 5px; user-select: none; font-weight: bold; }
         input { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; }
         .preview-box { border: 1px dashed #ccc; padding: 15px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 160px; align-items: center; }
-        
         .btn { border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; color: white; margin-bottom: 10px; transition: 0.3s; }
         .btn-copy { background: var(--brand); }
         .btn-html { background: #444; }
@@ -54,8 +53,8 @@
     const bHtml = document.getElementById('btn-html');
     const statusMsg = document.getElementById('status');
 
-    // !!! REPLACE THIS URL WITH YOUR GITHUB RAW IMAGE LINK !!!
-    const logoUrl = "https://github.com/MediaComms/bpw-email-signature-generator/blob/8572cf639226b94e1a2bba8997385517d0609f74/logo.jpg?raw=true";
+    // Applied the direct GitHub raw link provided
+    const logoUrl = "https://github.com/MediaComms/bpw-email-signature-generator/blob/main/logo.jpg?raw=true";
 
     function update() {
         const name = document.getElementById('f-name').value.trim();
@@ -77,15 +76,10 @@
             <div style="font-size: 16px; font-weight: bold; color: #704EA0; margin: 0;">${name || 'Full Name'}</div>
             <div style="font-size: 13px; color: #666666; margin-bottom: 3px;"><strong>${title || 'Job Title'}</strong></div>
             <div style="font-size: 12px; color: #000000; font-weight: bold;">Business and Professional Women’s Club of Port Moresby</div>
-            
-            <div style="font-size: 11px; color: #444; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
-                PO Box 1395, Port Moresby, NCD | PAPUA NEW GUINEA
-            </div>
-
+            <div style="font-size: 11px; color: #444; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">PO Box 1395, Port Moresby, NCD | PAPUA NEW GUINEA</div>
             <div style="font-size: 11px; margin-top: 3px;">
                 <strong style="color: #704EA0;">P:</strong> +675 ${phone || '0000 0000'} &nbsp;|&nbsp; <strong style="color: #704EA0;">E:</strong> <a href="mailto:${email}@bpw.org.pg" style="color: #0000EE; text-decoration: none;">${email || 'username'}@bpw.org.pg</a>
             </div>
-
             <div style="margin-top: 10px;">
                 <a href="https://www.facebook.com/profile.php?id=100079394379295" target="_blank" style="text-decoration: none; display: inline-block; background-color: #704EA0; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: bold;">FACEBOOK</a>
                 &nbsp;
@@ -110,7 +104,7 @@
         const nameVal = document.getElementById('f-name').value.trim();
         const emailVal = document.getElementById('f-email').value.trim();
         
-        // Custom File Name Format: FullName_email.signature
+        // Formats filename as FullName_email.signature
         const safeName = nameVal.replace(/\s+/g, '');
         const filename = `${safeName}_${emailVal}.signature`;
         
@@ -122,7 +116,7 @@
         link.download = filename;
         link.click();
         
-        // Reset fields
+        // Reset fields after download
         inputs.forEach(i => i.value = "");
         update();
         showStatus("✓ Saved as " + filename);
