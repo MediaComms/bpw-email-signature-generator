@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BPW PNG Signature Generator</title>
+    <title>BPW Email Signature Generator</title>
     <style>
         :root { --brand: #704EA0; --bg: #f4f4f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; }
+        body { font-family: 'Aptos', 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; }
         header { background: var(--brand); color: white; width: 100%; padding: 15px 0; text-align: center; margin-bottom: 20px; }
         .container { display: flex; flex-wrap: wrap; max-width: 1100px; width: 95%; gap: 20px; justify-content: center; }
         .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); flex: 1; min-width: 340px; }
@@ -14,9 +14,9 @@
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 3px; color: #555; }
         .input-wrapper { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 4px; padding: 6px; background: #fff; }
+        select, input { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; font-family: inherit; }
         .static-text { color: #888; font-size: 14px; padding: 0 5px; user-select: none; font-weight: bold; }
-        input { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; }
-        .preview-box { border: 1px solid #eee; padding: 10px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 140px; align-items: center; overflow-x: auto; }
+        .preview-box { border: 1px solid #eee; padding: 10px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 160px; align-items: center; overflow-x: auto; }
         .btn { border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; color: white; margin-bottom: 10px; transition: 0.3s; }
         .btn-copy { background: var(--brand); }
         .btn-html { background: #444; }
@@ -26,13 +26,26 @@
 </head>
 <body>
 
-<header><h1>BPW PNG Signature Generator</h1></header>
+<header><h1>BPW Email Signature Generator</h1></header>
 
 <div class="container">
     <div class="box">
         <h2>1. Personnel Details</h2>
-        <div class="form-group"><label>Full Name</label><div class="input-wrapper"><input type="text" id="f-name" placeholder="Enter Name"></div></div>
-        <div class="form-group"><label>Job Title</label><div class="input-wrapper"><input type="text" id="f-title" placeholder="Enter Title"></div></div>
+        
+        <div class="form-group">
+            <label>Branding / Cluster</label>
+            <div class="input-wrapper">
+                <select id="f-cluster" onchange="update()">
+                    <option value="main">BPW Main Club (Original)</option>
+                    <option value="wib">BPW Women In Business Cluster</option>
+                    <option value="lida">BPW Lida Meri Cluster</option>
+                    <option value="vab">BPW Vabukori Community Cluster</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group"><label>Full Name</label><div class="input-wrapper"><input type="text" id="f-name" placeholder="Full Name"></div></div>
+        <div class="form-group"><label>Job Title</label><div class="input-wrapper"><input type="text" id="f-title" placeholder="Job Title"></div></div>
         <div class="form-group"><label>Phone Number</label><div class="input-wrapper"><span class="static-text">+675</span><input type="text" id="f-phone" placeholder="7000 0000"></div></div>
         <div class="form-group"><label>Email Address</label><div class="input-wrapper"><input type="text" id="f-email" placeholder="username"><span class="static-text">@bpw.org.pg</span></div></div>
     </div>
@@ -42,7 +55,7 @@
         <div class="preview-box" id="signature-preview"></div>
         <button class="btn btn-copy" id="btn-copy" onclick="copySig()" disabled>Copy Signature for Gmail</button>
         <button class="btn btn-html" id="btn-html" onclick="downloadHTML()" disabled>Download HTML Signature</button>
-        <p id="status">✓ Done! Fields cleared.</p>
+        <p id="status">✓ Done!</p>
     </div>
 </div>
 
@@ -53,34 +66,55 @@
     const bHtml = document.getElementById('btn-html');
     const statusMsg = document.getElementById('status');
 
-    // CONVERTED GOOGLE DRIVE LINK:
-    // Original: https://drive.google.com/file/d/1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C/view
-    // Direct: https://drive.google.com/thumbnail?id=1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C&sz=w200
-    const logoUrl = "https://drive.google.com/thumbnail?id=1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C&sz=w200";
+    const clusterData = {
+        main: {
+            name: "",
+            logo: "https://drive.google.com/thumbnail?id=1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C&sz=w200"
+        },
+        wib: {
+            name: "BPW Women In Business Cluster",
+            logo: "https://drive.google.com/thumbnail?id=1CmAz1WugMR6_gujPkrjKrznvh7LTRHJ8&sz=w200"
+        },
+        lida: {
+            name: "BPW Lida Meri Cluster",
+            logo: "https://drive.google.com/thumbnail?id=1BI2F-2bAQrxC8mrnrBlJAr2fzlAgsUic&sz=w200"
+        },
+        vab: {
+            name: "BPW Vabukori Community Cluster",
+            logo: "https://drive.google.com/thumbnail?id=15HGgSlmN3FocJ1vw5WE4eCsSESCpGUYP&sz=w200"
+        }
+    };
 
     function update() {
-        const name = document.getElementById('f-name').value.trim();
-        const title = document.getElementById('f-title').value.trim();
-        const phone = document.getElementById('f-phone').value.trim();
-        const email = document.getElementById('f-email').value.trim();
+        const clusterKey = document.getElementById('f-cluster').value;
+        const cluster = clusterData[clusterKey];
         
-        const isReady = name && title && phone && email;
+        const name = document.getElementById('f-name').value.trim() || "Full Name";
+        const title = document.getElementById('f-title').value.trim() || "Job Title";
+        const phone = document.getElementById('f-phone').value.trim() || "0000 0000";
+        const email = document.getElementById('f-email').value.trim() || "username";
+        
+        // Buttons only enable when user has actually typed real info
+        const isReady = document.getElementById('f-name').value.trim() && document.getElementById('f-email').value.trim();
         bCopy.disabled = !isReady;
         bHtml.disabled = !isReady;
 
+        const clusterLine = cluster.name ? `<div style="font-size: 12px; color: #AC98C8; font-weight: 600; margin-bottom: 1px; border: none;">${cluster.name}</div>` : "";
+
         preview.innerHTML = `
-<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; line-height: 1.1; color: #333333; width: 600px; background-color: #ffffff; border-collapse: collapse; border: none !important;">
+<table cellpadding="0" cellspacing="0" border="0" style="font-family: 'Aptos', Arial, sans-serif; line-height: 1.1; color: #333333; width: 600px; background-color: #ffffff; border-collapse: collapse; border: none !important;">
     <tr>
         <td style="width: 100px; vertical-align: middle; padding-right: 15px; border-right: 2px solid #704EA0; border: none; border-right: 2px solid #704EA0;">
-            <img src="${logoUrl}" alt="BPW" width="85" style="display: block; width: 85px; border: 0 !important; outline: none;">
+            <img src="${cluster.logo}" alt="BPW" width="85" style="display: block; width: 85px; border: 0 !important; outline: none;">
         </td>
         <td style="padding-left: 15px; vertical-align: middle; border: none;">
-            <div style="font-size: 17px; font-weight: bold; color: #704EA0; margin: 0; border: none;">${name || 'Full Name'}</div>
-            <div style="font-size: 13px; color: #666666; margin-bottom: 2px; border: none;"><strong>${title || 'Job Title'}</strong></div>
+            <div style="font-size: 17px; font-weight: bold; color: #704EA0; margin: 0; border: none;">${name}</div>
+            <div style="font-size: 13px; color: #666666; margin-bottom: 2px; border: none;"><strong>${title}</strong></div>
+            ${clusterLine}
             <div style="font-size: 12px; color: #000000; font-weight: bold; border: none;">Business and Professional Women’s Club of Port Moresby</div>
             <div style="font-size: 11px; color: #444; border-top: 1px solid #eee; padding-top: 4px; margin-top: 4px;">PO Box 1395, Port Moresby, NCD | PAPUA NEW GUINEA</div>
             <div style="font-size: 11px; margin-top: 2px; border: none;">
-                <strong style="color: #704EA0;">P:</strong> +675 ${phone || '0000 0000'} &nbsp;|&nbsp; <strong style="color: #704EA0;">E:</strong> <a href="mailto:${email}@bpw.org.pg" style="color: #0000EE; text-decoration: none; border: none;">${email || 'username'}@bpw.org.pg</a>
+                <strong style="color: #704EA0;">P:</strong> +675 ${phone} &nbsp;|&nbsp; <strong style="color: #704EA0;">E:</strong> <a href="mailto:${email}@bpw.org.pg" style="color: #0000EE; text-decoration: none; border: none;">${email}@bpw.org.pg</a>
             </div>
             <div style="margin-top: 8px; border: none;">
                 <a href="https://www.facebook.com/profile.php?id=100079394379295" target="_blank" style="text-decoration: none; display: inline-block; background-color: #704EA0; color: white; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: bold; border: none;">FACEBOOK</a>
@@ -105,7 +139,7 @@
     function downloadHTML() {
         const nameVal = document.getElementById('f-name').value.trim();
         const emailVal = document.getElementById('f-email').value.trim();
-        const safeName = nameVal.replace(/\s+/g, '');
+        const safeName = nameVal.replace(/\s+/g, '') || "Signature";
         const filename = `${safeName}_${emailVal}.html`;
         const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0; padding:10px;">${preview.innerHTML}</body></html>`;
         const blob = new Blob([htmlContent], {type: 'text/html'});
@@ -113,9 +147,7 @@
         link.href = window.URL.createObjectURL(blob);
         link.download = filename;
         link.click();
-        inputs.forEach(i => i.value = "");
-        update();
-        showStatus("✓ Saved as " + filename);
+        showStatus("✓ Downloaded: " + filename);
     }
 
     function showStatus(text) {
@@ -125,6 +157,7 @@
     }
 
     inputs.forEach(i => i.addEventListener('input', update));
+    // Call update on load to ensure preview is visible
     update();
 </script>
 </body>
