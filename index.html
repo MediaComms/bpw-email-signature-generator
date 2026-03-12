@@ -16,7 +16,7 @@
         .input-wrapper { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 4px; padding: 6px; background: #fff; }
         .static-text { color: #888; font-size: 14px; padding: 0 5px; user-select: none; font-weight: bold; }
         input { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; }
-        .preview-box { border: 1px dashed #ccc; padding: 10px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 140px; align-items: center; overflow-x: auto; }
+        .preview-box { border: 1px solid #eee; padding: 10px; background: #fff; margin-bottom: 15px; display: flex; justify-content: center; min-height: 140px; align-items: center; overflow-x: auto; }
         .btn { border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; color: white; margin-bottom: 10px; transition: 0.3s; }
         .btn-copy { background: var(--brand); }
         .btn-html { background: #444; }
@@ -53,7 +53,10 @@
     const bHtml = document.getElementById('btn-html');
     const statusMsg = document.getElementById('status');
 
-    const logoUrl = "https://github.com/MediaComms/bpw-email-signature-generator/blob/main/logo.jpg?raw=true";
+    // CONVERTED GOOGLE DRIVE LINK:
+    // Original: https://drive.google.com/file/d/1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C/view
+    // Direct: https://drive.google.com/thumbnail?id=1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C&sz=w200
+    const logoUrl = "https://drive.google.com/thumbnail?id=1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C&sz=w200";
 
     function update() {
         const name = document.getElementById('f-name').value.trim();
@@ -65,25 +68,24 @@
         bCopy.disabled = !isReady;
         bHtml.disabled = !isReady;
 
-        // Reduced height by tightening vertical margins and padding
         preview.innerHTML = `
-<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; line-height: 1.1; color: #333333; width: 600px; background-color: #ffffff;">
+<table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; line-height: 1.1; color: #333333; width: 600px; background-color: #ffffff; border-collapse: collapse; border: none !important;">
     <tr>
-        <td style="width: 100px; vertical-align: middle; padding-right: 15px; border-right: 2px solid #704EA0;">
-            <img src="${logoUrl}" alt="BPW" width="85" style="display: block; width: 85px; border: 0;">
+        <td style="width: 100px; vertical-align: middle; padding-right: 15px; border-right: 2px solid #704EA0; border: none; border-right: 2px solid #704EA0;">
+            <img src="${logoUrl}" alt="BPW" width="85" style="display: block; width: 85px; border: 0 !important; outline: none;">
         </td>
-        <td style="padding-left: 15px; vertical-align: middle;">
-            <div style="font-size: 17px; font-weight: bold; color: #704EA0; margin: 0;">${name || 'Full Name'}</div>
-            <div style="font-size: 13px; color: #666666; margin-bottom: 2px;"><strong>${title || 'Job Title'}</strong></div>
-            <div style="font-size: 12px; color: #000000; font-weight: bold;">Business and Professional Women’s Club of Port Moresby</div>
+        <td style="padding-left: 15px; vertical-align: middle; border: none;">
+            <div style="font-size: 17px; font-weight: bold; color: #704EA0; margin: 0; border: none;">${name || 'Full Name'}</div>
+            <div style="font-size: 13px; color: #666666; margin-bottom: 2px; border: none;"><strong>${title || 'Job Title'}</strong></div>
+            <div style="font-size: 12px; color: #000000; font-weight: bold; border: none;">Business and Professional Women’s Club of Port Moresby</div>
             <div style="font-size: 11px; color: #444; border-top: 1px solid #eee; padding-top: 4px; margin-top: 4px;">PO Box 1395, Port Moresby, NCD | PAPUA NEW GUINEA</div>
-            <div style="font-size: 11px; margin-top: 2px;">
-                <strong style="color: #704EA0;">P:</strong> +675 ${phone || '0000 0000'} &nbsp;|&nbsp; <strong style="color: #704EA0;">E:</strong> <a href="mailto:${email}@bpw.org.pg" style="color: #0000EE; text-decoration: none;">${email || 'username'}@bpw.org.pg</a>
+            <div style="font-size: 11px; margin-top: 2px; border: none;">
+                <strong style="color: #704EA0;">P:</strong> +675 ${phone || '0000 0000'} &nbsp;|&nbsp; <strong style="color: #704EA0;">E:</strong> <a href="mailto:${email}@bpw.org.pg" style="color: #0000EE; text-decoration: none; border: none;">${email || 'username'}@bpw.org.pg</a>
             </div>
-            <div style="margin-top: 8px;">
-                <a href="https://www.facebook.com/profile.php?id=100079394379295" target="_blank" style="text-decoration: none; display: inline-block; background-color: #704EA0; color: white; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: bold;">FACEBOOK</a>
+            <div style="margin-top: 8px; border: none;">
+                <a href="https://www.facebook.com/profile.php?id=100079394379295" target="_blank" style="text-decoration: none; display: inline-block; background-color: #704EA0; color: white; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: bold; border: none;">FACEBOOK</a>
                 &nbsp;
-                <a href="https://www.linkedin.com/company/99291193/" target="_blank" style="text-decoration: none; display: inline-block; background-color: #704EA0; color: white; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: bold;">LINKEDIN</a>
+                <a href="https://www.linkedin.com/company/99291193/" target="_blank" style="text-decoration: none; display: inline-block; background-color: #704EA0; color: white; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: bold; border: none;">LINKEDIN</a>
             </div>
         </td>
     </tr>
@@ -105,7 +107,7 @@
         const emailVal = document.getElementById('f-email').value.trim();
         const safeName = nameVal.replace(/\s+/g, '');
         const filename = `${safeName}_${emailVal}.html`;
-        const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="padding:10px;">${preview.innerHTML}</body></html>`;
+        const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0; padding:10px;">${preview.innerHTML}</body></html>`;
         const blob = new Blob([htmlContent], {type: 'text/html'});
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
