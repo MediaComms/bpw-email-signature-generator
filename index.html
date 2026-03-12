@@ -54,8 +54,8 @@
     const bHtml = document.getElementById('btn-html');
     const statusMsg = document.getElementById('status');
 
-    // Using a high-availability direct image link to ensure visibility in all browsers/clients
-    const logoUrl = "https://i.ibb.co/XRsM66N/bpw-logo.jpg";
+    // !!! REPLACE THIS URL WITH YOUR GITHUB RAW IMAGE LINK !!!
+    const logoUrl = "https://github.com/MediaComms/bpw-email-signature-generator/blob/8572cf639226b94e1a2bba8997385517d0609f74/logo.jpg?raw=true";
 
     function update() {
         const name = document.getElementById('f-name').value.trim();
@@ -103,15 +103,16 @@
         window.getSelection().addRange(range);
         document.execCommand('copy');
         window.getSelection().removeAllRanges();
-        showStatus("✓ Copied! Ready to paste into Gmail.");
+        showStatus("✓ Copied!");
     }
 
     function downloadHTML() {
-        const nameVal = document.getElementById('f-name').value;
-        const emailVal = document.getElementById('f-email').value;
+        const nameVal = document.getElementById('f-name').value.trim();
+        const emailVal = document.getElementById('f-email').value.trim();
         
         // Custom File Name Format: FullName_email.signature
-        const filename = nameVal.replace(/\s+/g, '') + "_" + emailVal + ".signature";
+        const safeName = nameVal.replace(/\s+/g, '');
+        const filename = `${safeName}_${emailVal}.signature`;
         
         const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="padding:20px;">${preview.innerHTML}</body></html>`;
         
@@ -121,10 +122,10 @@
         link.download = filename;
         link.click();
         
-        // Resetting fields AFTER download trigger
+        // Reset fields
         inputs.forEach(i => i.value = "");
         update();
-        showStatus("✓ File saved. Fields cleared.");
+        showStatus("✓ Saved as " + filename);
     }
 
     function showStatus(text) {
@@ -134,7 +135,7 @@
     }
 
     inputs.forEach(i => i.addEventListener('input', update));
-    update(); // Run once to show initial template with logo
+    update();
 </script>
 </body>
 </html>
