@@ -72,15 +72,15 @@
             logo: "https://drive.google.com/thumbnail?id=1F1QqPaOd73DX4wLEpofo_7SVHbz3PE1C&sz=w200"
         },
         wib: {
-            name: "BPW Women In Business Cluster",
+            name: "BPW WOMEN IN BUSINESS CLUSTER",
             logo: "https://drive.google.com/thumbnail?id=1CmAz1WugMR6_gujPkrjKrznvh7LTRHJ8&sz=w200"
         },
         lida: {
-            name: "BPW Lida Meri Cluster",
+            name: "BPW LIDA MERI CLUSTER",
             logo: "https://drive.google.com/thumbnail?id=1BI2F-2bAQrxC8mrnrBlJAr2fzlAgsUic&sz=w200"
         },
         vab: {
-            name: "BPW Vabukori Community Cluster",
+            name: "BPW VABUKORI COMMUNITY CLUSTER",
             logo: "https://drive.google.com/thumbnail?id=15HGgSlmN3FocJ1vw5WE4eCsSESCpGUYP&sz=w200"
         }
     };
@@ -94,12 +94,11 @@
         const phone = document.getElementById('f-phone').value.trim() || "0000 0000";
         const email = document.getElementById('f-email').value.trim() || "username";
         
-        // Buttons only enable when user has actually typed real info
         const isReady = document.getElementById('f-name').value.trim() && document.getElementById('f-email').value.trim();
         bCopy.disabled = !isReady;
         bHtml.disabled = !isReady;
 
-        const clusterLine = cluster.name ? `<div style="font-size: 12px; color: #AC98C8; font-weight: 600; margin-bottom: 1px; border: none;">${cluster.name}</div>` : "";
+        const clusterLine = cluster.name ? `<div style="font-size: 12px; color: #AC98C8; font-weight: 600; margin-bottom: 1px; border: none; text-transform: uppercase;">${cluster.name}</div>` : "";
 
         preview.innerHTML = `
 <table cellpadding="0" cellspacing="0" border="0" style="font-family: 'Aptos', Arial, sans-serif; line-height: 1.1; color: #333333; width: 600px; background-color: #ffffff; border-collapse: collapse; border: none !important;">
@@ -157,7 +156,6 @@
     }
 
     inputs.forEach(i => i.addEventListener('input', update));
-    // Call update on load to ensure preview is visible
     update();
 </script>
 </body>
